@@ -1,4 +1,4 @@
-import AccountProifle from "@/components/forms/AccountProfile";
+import AccountProfile from "@/components/forms/AccountProfile";
 import { currentUser } from "@clerk/nextjs";
 
 async function Page() {
@@ -21,7 +21,7 @@ async function Page() {
         Complete your profile now to use Threads
       </p>
       <section className="mt-9 bg-dark-2 p-10">
-        <AccountProifle user={userData} btnTitle="Continue" />
+        <AccountProfile user={userData} btnTitle="Continue" />
       </section>
     </main>
   );
