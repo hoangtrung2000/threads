@@ -10,15 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { isBase64Image } from "@/lib/utils";
 import { UserValidations } from "@/lib/validations/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { useUploadThing } from "@/lib/uploadthing";
 
+import userAccountProfile from "@/hook/useAccountProfile";
 interface Props {
   user: {
     id: string;
@@ -32,8 +29,8 @@ interface Props {
 }
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
-  const [files, setFiles] = useState<File[]>([]);
-  const { startUpload } = useUploadThing("media");
+  const { files, handleImage, onSubmit } = userAccountProfile(user.id);
+
   const form = useForm({
     resolver: zodResolver(UserValidations),
     defaultValues: {
@@ -43,40 +40,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       bio: user?.bio || "",
     },
   });
-
-  const handleImage = (
-    e: ChangeEvent<HTMLInputElement>,
-    fieldChange: (value: string) => void
-  ) => {
-    e.preventDefault();
-    const fileReader = new FileReader();
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setFiles(Array.from(e.target.files));
-      if (!file.type.includes("image")) return;
-
-      fileReader.onload = async (event) => {
-        const imageDataUrl = event.target?.result?.toString() || "";
-
-        fieldChange(imageDataUrl);
-      };
-      fileReader.readAsDataURL(file);
-    }
-  };
-
-  const onSubmit = async (values: z.infer<typeof UserValidations>) => {
-    const blob = values.profile_photo;
-    const hasImageChanged = isBase64Image(blob);
-
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
-
-      if (imgRes && imgRes[0].url) {
-        values.profile_photo = imgRes[0].url;
-      }
-    }
-    //TODO: Update user profile
-  };
 
   return (
     <Form {...form}>
