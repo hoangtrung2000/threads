@@ -10,11 +10,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import usePostThread from "@/hook/usePostThread";
 import { ThreadValidations } from "@/lib/validations/thread";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 const PostThread = ({ userId }: { userId: string }) => {
+  const { onSubmit } = usePostThread(userId);
   const form = useForm({
     resolver: zodResolver(ThreadValidations),
     defaultValues: {
@@ -22,8 +24,6 @@ const PostThread = ({ userId }: { userId: string }) => {
       accountId: userId,
     },
   });
-
-  const onSubmit = () => {};
 
   return (
     <Form {...form}>
