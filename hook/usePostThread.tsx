@@ -10,6 +10,7 @@ interface UsePostThreadResult {
 const usePostThread = (userId: string): UsePostThreadResult => {
   const pathname = usePathname();
   const router = useRouter();
+
   const onSubmit = async (values: z.infer<typeof ThreadValidations>) => {
     await createThread({
       text: values.thread,
