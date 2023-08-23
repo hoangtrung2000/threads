@@ -45,7 +45,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   const skipAmount = (pageNumber - 1) * pageSize;
   // Fetch the posts that have no parents (top-level threads...)
   const postQuery = Thread.find({ parentId: { $in: [null, undefined] } })
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: "desc" })
     .skip(skipAmount)
     .limit(pageSize)
     .populate({ path: "author", model: User })
