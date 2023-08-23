@@ -32,7 +32,7 @@ const Comment = ({ threadId, currentUserImage, currentUserId }: Props) => {
               <FormLabel>
                 <Image
                   src={currentUserImage}
-                  alt="Profile image"
+                  alt="current_user"
                   width={48}
                   height={48}
                   className="rounded-full object-cover"
